@@ -1,0 +1,7 @@
+exps/
+.vscode/
+__pycache__/
+data/
+extractor/
+m3video/flow/
+*tmp.*
