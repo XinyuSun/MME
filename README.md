@@ -1,5 +1,5 @@
 # Official PyTorch Implementation of MME (CVPR2023)
-![avatar](resource/visual.png)
+![avatar](resource/arch.png)
 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/m-3-video-masked-motion-modeling-for-self/self-supervised-action-recognition-on-hmdb51)](https://paperswithcode.com/sota/self-supervised-action-recognition-on-hmdb51?p=m-3-video-masked-motion-modeling-for-self)<br>
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/m-3-video-masked-motion-modeling-for-self/self-supervised-action-recognition-on-ucf101)](https://paperswithcode.com/sota/self-supervised-action-recognition-on-ucf101?p=m-3-video-masked-motion-modeling-for-self)
