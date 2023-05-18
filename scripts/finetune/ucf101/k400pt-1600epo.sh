@@ -15,8 +15,8 @@ python -m torch.distributed.launch --nproc_per_node=$1 \
     --master_port 12320 --nnodes=$2  --node_rank=$3 --master_addr=$4 \
     finetune/run.py \
     --model ${MODEL} \
-    --data_set HMDB51 \
-    --nb_classes 51 \
+    --data_set UCF101 \
+    --nb_classes 101 \
     --data_path ${DATA_PATH} \
     --finetune ${MODEL_PATH} \
     --log_dir ${OUTPUT_DIR} \
