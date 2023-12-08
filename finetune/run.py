@@ -187,6 +187,9 @@ def get_args():
     parser.add_argument('--mask_ratio', default=0.0, type=float, help='mask ratio for finetuning')
     parser.add_argument('--crop_min', default=0.25, type=float, help='min crop rate')
 
+    # linear probing
+    parser.add_argument('--linear_probing', action='store_true', default=False)
+
     known_args, _ = parser.parse_known_args()
 
     if known_args.enable_deepspeed:
@@ -451,7 +454,7 @@ def main(args, ds_init):
         assert model.gradient_accumulation_steps() == args.update_freq
     else:
         if args.distributed:
-            model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu], find_unused_parameters=False)
+            model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu], find_unused_parameters=True if args.linear_probing else False)
             model_without_ddp = model.module
 
         optimizer = create_optimizer(
@@ -484,6 +487,20 @@ def main(args, ds_init):
     utils.auto_load_model(
         args=args, model=model, model_without_ddp=model_without_ddp,
         optimizer=optimizer, loss_scaler=loss_scaler, model_ema=model_ema)
+
+    if args.linear_probing:
+        print('Warning! running linear probing!\nOnly train fc layer!')
+        param_require_grad = list()
+        for k,v in model.named_parameters():
+            if not 'head' in k:
+                v.requires_grad = False
+            else:
+                param_require_grad.append(k)
+        print(f'Warning! these params require grad:\n{param_require_grad}')
+    
+    n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print(">>"*10)
+    print("total trainable parameters: {}".format(n_parameters))
 
     if not args.eval:
         # finetune
